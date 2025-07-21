@@ -9,9 +9,12 @@ A simple chatbot built using Hugging Face LLMs and deployed with Streamlit.
 **Srikanta Vai Sravan** – Launched Global AI Internship
 
 ## 🧠 Model Used
-`EleutherAI/gpt-neo-1.3B`
+EleutherAI/gpt-neo-1.3B`
 
 ## 🛠️ Run
-```bash
+
 pip install -r requirements.txt
 streamlit run chatbot_app.py
+pip install streamlit transformers torch
+
+
