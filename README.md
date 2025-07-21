@@ -1,35 +1,36 @@
-# 🤖 Chatbot-LLM
+# 🤖 LLM Chatbot
 
-A simple chatbot built using Hugging Face LLMs and deployed via Streamlit. This project demonstrates how to integrate a Large Language Model (LLM) with an interactive web interface using Python. It supports conversation through GPT-Neo or OpenAI API (based on configuration).
+A simple chatbot built using Hugging Face GPT-Neo and OpenAI's GPT-3.5-Turbo, deployed with Streamlit.
 
 ---
 
 ## 👨‍💻 Created By
 
 **Srikanta Vai Sravan**  
-AI Developer – Launched Global AI Internship
+Intern @ Launched Global AI Internship  
+Guided by **Harsh Vajpayee Sir**  
+With support from **Pravallika Gupta Ma’am**, Associate Team Lead, Launched Global  
 
 ---
 
-## 🧠 Model Used
+## 🧠 Models Used
 
-- `EleutherAI/gpt-neo-1.3B` (via Hugging Face Transformers)
-- Optional: OpenAI GPT models (if configured using OpenAI API)
+- **GPT-Neo 1.3B** by EleutherAI (Offline Inference)
+- **OpenAI GPT-3.5 Turbo** (Online API access)
 
 ---
 
-## 📦 Setup Instructions
+## 📂 Setup Instructions
 
-Make sure you have Python ≥ 3.8 installed.
+### 1. Clone the Repo
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/yourusername/chatbot-llm.git
+git clone https://github.com/your-username/chatbot-llm.git
 cd chatbot-llm
-pip install -r requirements.txt
-pip install streamlit transformers torch
-pip install openai
-export OPENAI_API_KEY=" sk-https://platform.openai.com/account/api-keys"
+python -m venv venv
 
-openai migrate
-pip install openai==0.28
+venv\\Scripts\\activate   # For Windows
+
+pip install -r requirements.txt
+pip install streamlit transformers torch openai python-dotenv
+streamlit run chatbot_app.py
+
