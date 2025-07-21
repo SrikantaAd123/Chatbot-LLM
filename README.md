@@ -30,7 +30,9 @@ cd chatbot-llm
 
 
 pip install -r requirements.txt
-pip install streamlit transformers torch openai python-dotenv
-streamlit run chatbot_app.py
 
+streamlit run chatbot_app.py
+pip install gradio
+pip install streamlit
+pip install transformers
 
