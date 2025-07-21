@@ -1,22 +1,24 @@
 import streamlit as st
-import openai
+from transformers import pipeline
+from dotenv import load_dotenv
 
-# ✅ Use OpenAI client (v1+)
-client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# Load environment variables
+load_dotenv()
 
-# UI
-st.title("🧠 Chatbot App")
-user_input = st.text_input("Enter your question:")
+# Load local model for Q&A
+qa_pipeline = pipeline("question-answering", model="distilbert-base-cased-distilled-squad")
 
-if user_input:
+# Streamlit UI
+st.title("🧠 Local Chatbot App (No API)")
+
+st.write("Ask a question related to the context provided below:")
+
+context = st.text_area("Enter context (the text from which chatbot will answer):", height=200)
+question = st.text_input("Enter your question:")
+
+if context and question:
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": user_input}
-            ]
-        )
-        st.write("🤖", response.choices[0].message.content)
+        result = qa_pipeline(question=question, context=context)
+        st.success(f"🤖 Answer: {result['answer']}")
     except Exception as e:
         st.error(f"❌ Error: {str(e)}")
