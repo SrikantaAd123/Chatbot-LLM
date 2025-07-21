@@ -1,43 +1,28 @@
-from transformers import pipeline
-import gradio as gr
+import openai
+import streamlit as st
 
-from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
+openai.api_key = st.secrets["OPENAI_API_KEY"]  # or os.getenv("OPENAI_API_KEY")
 
-chatbot = pipeline("conversational", model="facebook/blenderbot-3B")
+# Function to get GPT response
+def ask_gpt(prompt, chat_history):
+    messages = chat_history + [{"role": "user", "content": prompt}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # or gpt-4
+        messages=messages,
+        temperature=0.7,
+        max_tokens=300,
+    )
+    answer = response.choices[0].message["content"]
+    chat_history.append({"role": "assistant", "content": answer})
+    return answer, chat_history
 
+# Streamlit UI
+st.title("🧠 Chatbot App")
+if "history" not in st.session_state:
+    st.session_state.history = [{"role": "system", "content": "You are a helpful assistant."}]
 
-while True:
-    user_input = input("You: ")
-    if user_input.lower() in ['exit', 'quit']:
-        break
-    response = chatbot(user_input)
-    print("Bot:", response[0]['generated_text'])
+user_input = st.text_input("You:", "")
 
-# Define the chatbot function
-def vanilla_chatbot(message, history):
-    # The history from Gradio's ChatInterface is a list of lists: [[user_msg, bot_msg], ...]
-    # Convert it to the format expected by the conversational pipeline
-    conversation_history = []
-    for human, assistant in history:
-        conversation_history.append({"role": "user", "content": human})
-        conversation_history.append({"role": "assistant", "content": assistant})
-    conversation_history.append({"role": "user", "content": message})
-
-
-    # Generate a response using the chatbot
-    response = chatbot(conversation_history)
-    # Extract the generated text from the response
-    generated_text = response[-1]['content']
-
-    # Return the user message and the generated response as a tuple for Gradio
-    return generated_text
-
-# Create a Gradio interface
-demo_chatbot = gr.ChatInterface(
-    vanilla_chatbot,
-    title="Mashdemy Chatbot",
-    description="Enter text to start chatting."
-)
-
-# Launch the demo
-demo_chatbot.launch(share = True, debug=True)
+if user_input:
+    response, st.session_state.history = ask_gpt(user_input, st.session_state.history)
+    st.markdown(f"**Bot:** {response}")
