@@ -21,6 +21,9 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 streamlit run chatbot_app.py
 
+pip install python-dotenv
+
+
 heroku login
 heroku create chatbotapp.py
 git push heroku main
