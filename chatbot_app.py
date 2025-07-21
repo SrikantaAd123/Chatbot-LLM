@@ -1,11 +1,10 @@
 import openai
-import streamlit as st
-
+import os
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()  # load variables from .env
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Function to get GPT response
 def ask_gpt(prompt, chat_history):
