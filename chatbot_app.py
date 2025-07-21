@@ -1,47 +1,39 @@
-import streamlit as st
-import openai
-from transformers import pipeline
+# chatbot_app.py
+
 import os
+import openai
+import streamlit as st
 from dotenv import load_dotenv
 
-# Load API key from .env file
+# Load environment variables from .env file
 load_dotenv()
+
+# Set OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Hugging Face Pipeline
-hf_generator = pipeline("text-generation", model="EleutherAI/gpt-neo-1.3B")
+# Streamlit page settings
+st.set_page_config(page_title="LLM Chatbot App")
+st.title("🤖 AI Chatbot using OpenAI GPT-3.5")
 
-def generate_hf_response(prompt):
-    result = hf_generator(prompt, max_length=100, do_sample=True, temperature=0.7)
-    return result[0]['generated_text']
+# Prompt input
+prompt = st.text_area("📝 Enter your question:", height=150)
 
-def generate_openai_response(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # You must have access to this model in your OpenAI account
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
-
-# Streamlit UI
-st.set_page_config(page_title="LLM Chatbot", layout="centered")
-st.title("🤖 LLM Chatbot")
-st.markdown("Chat with Hugging Face GPT-Neo or OpenAI GPT-3.5 Turbo")
-
-# User input
-user_input = st.text_area("Enter your message:")
-
-# Model selection
-model_choice = st.selectbox("Select Model:", ["GPT-Neo (Hugging Face)", "GPT-3.5 Turbo"])
-
-if st.button("Get Response"):
-    if model_choice == "GPT-3.5 Turbo":
-        try:
-            response = generate_openai_response(user_input)
-            st.markdown(f"""**Response:**  
-{response}""")
-        except Exception as e:
-            st.error(f"⚠️ Error: {str(e)}")
+# Generate response
+if st.button("💬 Generate Response"):
+    if not prompt.strip():
+        st.warning("Please enter a prompt/question.")
     else:
-        response = generate_hf_response(user_input)
-        st.markdown(f"""**Response:**  
-{response}""")
+        with st.spinner("Generating response..."):
+            try:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant."},
+                        {"role": "user", "content": prompt}
+                    ]
+                )
+                reply = response['choices'][0]['message']['content']
+                st.success("✅ Response Generated")
+                st.markdown(f"**Response:**\n\n{reply}")
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
