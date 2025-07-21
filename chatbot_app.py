@@ -1,6 +1,3 @@
-
-### ✅ `chatbot_app.py`
-```python
 import streamlit as st
 from transformers import pipeline
 
