@@ -1,7 +1,12 @@
 .env
 __pycache__/
 *.pyc
-.venv/
-.env.*
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.idea/
 .vscode/
-*.sqlite3
+.DS_Store
+.streamlit/
