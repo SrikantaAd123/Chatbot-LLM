@@ -1,19 +1,11 @@
 import streamlit as st
 import openai
 
-from dotenv import load_dotenv
+# ✅ Use OpenAI client (v1+)
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Load environment variables from .env
-load_dotenv()
-
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
-# ✅ NEW client setup for OpenAI v1+
-client = openai.OpenAI()
-
-# Streamlit UI
+# UI
 st.title("🧠 Chatbot App")
-
 user_input = st.text_input("Enter your question:")
 
 if user_input:
