@@ -1,19 +1,16 @@
 import streamlit as st
 from transformers import pipeline
 
-st.title("🤖 AI Chatbot (Tiny GPT)")
+# Title of the app
+st.title("🤖 Chatbot with HuggingFace Transformers")
 
-try:
-    chatbot = pipeline("text-generation", model="sshleifer/tiny-gpt2")  # Tiny model for demo
-except Exception as e:
-    st.error(f"❌ Failed to load model: {e}")
-    st.stop()
+# Create chatbot pipeline using a pre-trained model
+chatbot = pipeline("text-generation", model="microsoft/DialoGPT-medium")
 
-user_input = st.text_input("You:", placeholder="Type your message...")
+# Input from user
+user_input = st.text_input("You: ", "")
 
 if user_input:
-    try:
-        response = chatbot(user_input, max_length=50, do_sample=True)[0]["generated_text"]
-        st.write("**Bot:**", response)
-    except Exception as e:
-        st.error(f"❌ Error generating response: {e}")
+    # Generate response from chatbot
+    response = chatbot(user_input, max_length=1000, pad_token_id=50256)[0]['generated_text']
+    st.text_area("Bot:", value=response, height=200)
