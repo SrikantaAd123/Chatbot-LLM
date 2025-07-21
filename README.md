@@ -14,7 +14,9 @@ EleutherAI/gpt-neo-1.3B`
 ## 🛠️ Run
 
 pip install -r requirements.txt
+
 streamlit run chatbot_app.py
+
 pip install streamlit transformers torch
 
 
