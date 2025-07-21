@@ -1,31 +1,27 @@
+import streamlit as st
 import openai
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # load variables from .env
-
+# Load API key from .env file
+load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Function to get GPT response
-def ask_gpt(prompt, chat_history):
-    messages = chat_history + [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # or gpt-4
-        messages=messages,
-        temperature=0.7,
-        max_tokens=300,
-    )
-    answer = response.choices[0].message["content"]
-    chat_history.append({"role": "assistant", "content": answer})
-    return answer, chat_history
-
 # Streamlit UI
+st.set_page_config(page_title="🧠 Chatbot App")
 st.title("🧠 Chatbot App")
-if "history" not in st.session_state:
-    st.session_state.history = [{"role": "system", "content": "You are a helpful assistant."}]
 
-user_input = st.text_input("You:", "")
+# Input from user
+user_input = st.text_input("Ask me anything")
 
 if user_input:
-    response, st.session_state.history = ask_gpt(user_input, st.session_state.history)
-    st.markdown(f"**Bot:** {response}")
+    with st.spinner("Generating response..."):
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful chatbot."},
+                {"role": "user", "content": user_input}
+            ]
+        )
+        reply = response['choices'][0]['message']['content']
+        st.success(reply)
