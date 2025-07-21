@@ -19,4 +19,9 @@ streamlit run chatbot_app.py
 
 pip install streamlit transformers torch
 
+pip install openai
+
+pip install openai streamlit
+
+
 
