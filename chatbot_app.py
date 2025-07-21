@@ -1,8 +1,16 @@
 from transformers import pipeline
 import gradio as gr
 
-# Initialize the chatbot with a conversational pipeline and a suitable model
+from transformers import BlenderbotTokenizer, BlenderbotForConditionalGeneration
+
 chatbot = pipeline("conversational", model="facebook/blenderbot-3B")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() in ['exit', 'quit']:
+        break
+    response = chatbot(user_input)
+    print("Bot:", response[0]['generated_text'])
 
 # Define the chatbot function
 def vanilla_chatbot(message, history):
