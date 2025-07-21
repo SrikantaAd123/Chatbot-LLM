@@ -1,37 +1,34 @@
-import os
-import openai
-import streamlit as st
-from dotenv import load_dotenv
+from transformers import pipeline
+import gradio as gr
 
-# Load environment variables from .env
-load_dotenv()
+# Initialize the chatbot with a conversational pipeline and a suitable model
+chatbot = pipeline("conversational", model="facebook/blenderbot-3B")
 
-# Set OpenAI API key from environment variable
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Define the chatbot function
+def vanilla_chatbot(message, history):
+    # The history from Gradio's ChatInterface is a list of lists: [[user_msg, bot_msg], ...]
+    # Convert it to the format expected by the conversational pipeline
+    conversation_history = []
+    for human, assistant in history:
+        conversation_history.append({"role": "user", "content": human})
+        conversation_history.append({"role": "assistant", "content": assistant})
+    conversation_history.append({"role": "user", "content": message})
 
-# Set up Streamlit page
-st.set_page_config(page_title="LLM Chatbot App")
-st.title("🤖 AI Chatbot using OpenAI GPT-3.5")
 
-# User input
-prompt = st.text_area("📝 Enter your question:", height=150)
+    # Generate a response using the chatbot
+    response = chatbot(conversation_history)
+    # Extract the generated text from the response
+    generated_text = response[-1]['content']
 
-if st.button("💬 Generate Response"):
-    if not prompt.strip():
-        st.warning("⚠️ Please enter a prompt/question.")
-    else:
-        with st.spinner("🧠 Generating response..."):
-            try:
-                # Call OpenAI API
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "You are a helpful assistant."},
-                        {"role": "user", "content": prompt}
-                    ]
-                )
-                reply = response['choices'][0]['message']['content']
-                st.success("✅ Response Generated")
-                st.markdown(f"**Response:**\n\n{reply}")
-            except Exception as e:
-                st.error(f"❌ Error: {e}")
+    # Return the user message and the generated response as a tuple for Gradio
+    return generated_text
+
+# Create a Gradio interface
+demo_chatbot = gr.ChatInterface(
+    vanilla_chatbot,
+    title="Mashdemy Chatbot",
+    description="Enter text to start chatting."
+)
+
+# Launch the demo
+demo_chatbot.launch(share = True, debug=True)
