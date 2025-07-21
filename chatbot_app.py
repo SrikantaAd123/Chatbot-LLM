@@ -1,47 +1,55 @@
-import streamlit as st
-import openai
-from dotenv import load_dotenv
+# chatbot_app.py
+
 import os
+import openai
+import streamlit as st
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
 
-load_dotenv()  # ✅ Load environment variables from .env
+# Set OpenAI API key from environment variable
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Title
+st.set_page_config(page_title="LLM Chatbot App")
+st.title("🤖 AI Chatbot using GPT-Neo and OpenAI")
 
+# Sidebar toggle
+model_choice = st.sidebar.selectbox("Choose a model", ("GPT-Neo", "OpenAI GPT-3.5"))
 
-st.set_page_config(page_title="AI Chatbot", layout="centered")
-st.title("🤖 AI Chatbot with OpenAI & Streamlit")
+# Input box
+prompt = st.text_area("📝 Enter your question:", height=150)
 
-# Session message history
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [
-        {"role": "system", "content": "You are a helpful assistant."}
-    ]
-
-# Text input
-user_input = st.text_input("You:", key="input")
-
-if st.button("Send") and user_input:
-    # Add user message
-    st.session_state.messages.append({"role": "user", "content": user_input})
-
-    # Call OpenAI API
-    try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=st.session_state.messages
-        )
-        reply = response.choices[0].message.content.strip()
-
-        # Add assistant reply
-        st.session_state.messages.append({"role": "assistant", "content": reply})
-
-    except Exception as e:
-        st.error(f"⚠️ Error: {e}")
-
-# Display full conversation
-for msg in st.session_state.messages[1:]:
-    if msg["role"] == "user":
-        st.markdown(f"**You:** {msg['content']}")
+if st.button("💬 Generate Response"):
+    if not prompt.strip():
+        st.warning("Please enter a prompt/question.")
     else:
-        st.markdown(f"**Bot:** {msg['content']}")
+        with st.spinner("Generating response..."):
+            if model_choice == "GPT-Neo":
+                # Load GPT-Neo
+                tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neo-1.3B")
+                model = AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-neo-1.3B")
+                inputs = tokenizer(prompt, return_tensors="pt")
+                outputs = model.generate(**inputs, max_length=150, do_sample=True)
+                response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+                st.success("✅ Response Generated")
+                st.markdown(f"**Response:**\n
+{response}")
+
+            elif model_choice == "OpenAI GPT-3.5":
+                try:
+                    response = openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {"role": "system", "content": "You are a helpful assistant."},
+                            {"role": "user", "content": prompt},
+                        ]
+                    )
+                    reply = response['choices'][0]['message']['content']
+                    st.success("✅ Response Generated")
+                    st.markdown(f"**Response:**\n
+{reply}")
+                except Exception as e:
+                    st.error(f"❌ Error: {e}")
