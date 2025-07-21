@@ -2,51 +2,44 @@ import streamlit as st
 import openai
 import os
 
-# Set your OpenAI API Key securely
-openai.api_key = st.secrets["OPENAI_API_KEY"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
+# Set your OpenAI API key here or use secrets/environment variables
+openai.api_key = os.getenv("OPENAI_API_KEY") or "your-api-key-here"
 
-# App title
-st.set_page_config(page_title="AI Chatbot", page_icon="🤖")
-st.title("🤖 Intelligent AI Chatbot")
-st.markdown("Ask anything and get smart AI-powered answers using GPT!")
+# Initialize OpenAI client (for v1.x)
+client = openai.OpenAI()
 
-# Session state for chat history
+st.set_page_config(page_title="AI Chatbot", layout="centered")
+st.title("🤖 AI Chatbot with OpenAI & Streamlit")
+
+# Initialize session
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state["messages"] = [
+        {"role": "system", "content": "You are a helpful assistant."}
+    ]
 
-# Input area
-user_input = st.text_input("You:", placeholder="Ask me anything...", key="input")
+# User input
+user_input = st.text_input("You:", key="input")
 
-# Function to get OpenAI response
-def get_gpt_response(prompt):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",  # or "gpt-3.5-turbo"
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                *st.session_state.messages,
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=500,
-            temperature=0.7
-        )
-        return response.choices[0].message["content"].strip()
-    except Exception as e:
-        return f"⚠️ Error: {e}"
-
-# Process user input
-if user_input:
-    # Save user message
+if st.button("Send") and user_input:
+    # Add user input to chat history
     st.session_state.messages.append({"role": "user", "content": user_input})
-    
-    # Get response
-    bot_response = get_gpt_response(user_input)
-    st.session_state.messages.append({"role": "assistant", "content": bot_response})
 
-# Show conversation
-st.markdown("### 💬 Conversation:")
-for msg in st.session_state.messages:
+    # Call OpenAI API (v1.x syntax)
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=st.session_state.messages
+        )
+        reply = response.choices[0].message.content
+
+        # Add bot reply to history
+        st.session_state.messages.append({"role": "assistant", "content": reply})
+    except Exception as e:
+        st.error(f"⚠️ Error: {e}")
+
+# Display conversation
+for msg in st.session_state.messages[1:]:
     if msg["role"] == "user":
         st.markdown(f"**You:** {msg['content']}")
-    elif msg["role"] == "assistant":
+    else:
         st.markdown(f"**Bot:** {msg['content']}")
