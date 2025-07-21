@@ -23,5 +23,8 @@ pip install openai
 
 pip install openai streamlit
 
+openai migrate
+
+pip install openai==0.28
 
 
