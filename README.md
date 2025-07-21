@@ -25,3 +25,7 @@ pip install python-dotenv
 
 pip install streamlit openai python-dotenv
 
+pip uninstall openai -y
+pip install --upgrade openai
+pip show openai
+
