@@ -1,4 +1,3 @@
-streamlit>=1.10
-transformers>=4.40
-torch
-openai
+openai>=1.0.0
+streamlit
+python-dotenv  
