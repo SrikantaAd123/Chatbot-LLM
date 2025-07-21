@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-openai.api_key = st.secrets["OPENAI_API_KEY"]  # or os.getenv("OPENAI_API_KEY")
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Function to get GPT response
 def ask_gpt(prompt, chat_history):
