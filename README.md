@@ -23,7 +23,5 @@ streamlit run chatbot_app.py
 
 pip install python-dotenv
 
+pip install streamlit openai python-dotenv
 
-heroku login
-heroku create chatbotapp.py
-git push heroku main
