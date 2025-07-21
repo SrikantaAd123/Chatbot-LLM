@@ -15,17 +15,10 @@ A simple conversational chatbot built using OpenAI's GPT model (`gpt-3.5-turbo` 
 git clone https://github.com/yourusername/chatbot-llm.git
 cd chatbot-llm
 
+
+
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate   # On Windows: venv\Scripts\activate
 
 pip install -r requirements.txt
 streamlit run chatbot_app.py
-
-pip install python-dotenv
-
-pip install streamlit openai python-dotenv
-
-pip uninstall openai -y
-pip install --upgrade openai
-pip show openai
-
