@@ -1,1 +1,1 @@
-web: python chatbot_app.py
+web: streamlit run chatbot_app.py
