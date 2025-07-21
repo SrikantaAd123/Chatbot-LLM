@@ -1,1 +1,1 @@
-pip install --upgrade pip
+web: python chatbot_app.py
