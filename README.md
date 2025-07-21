@@ -26,11 +26,11 @@ With support from **Pravallika Gupta Ma’am**, Associate Team Lead, Launched Gl
 
 git clone https://github.com/your-username/chatbot-llm.git
 cd chatbot-llm
-python -m venv venv
 
-venv\\Scripts\\activate   # For Windows
+
 
 pip install -r requirements.txt
 pip install streamlit transformers torch openai python-dotenv
 streamlit run chatbot_app.py
+pip install openai==0.28
 
