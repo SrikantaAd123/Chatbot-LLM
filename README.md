@@ -29,7 +29,7 @@ cd chatbot-llm
 pip install -r requirements.txt
 pip install streamlit transformers torch
 pip install openai
-export OPENAI_API_KEY=" https://platform.openai.com/account/api-keys"
+export OPENAI_API_KEY=" sk-https://platform.openai.com/account/api-keys"
 
 openai migrate
 pip install openai==0.28
