@@ -32,5 +32,5 @@ cd chatbot-llm
 pip install -r requirements.txt
 pip install streamlit transformers torch openai python-dotenv
 streamlit run chatbot_app.py
-pip install openai==0.28
+
 
