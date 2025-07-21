@@ -36,3 +36,7 @@ pip install gradio
 pip install streamlit
 pip install transformers
 
+pip uninstall transformers
+pip install transformers==4.28.1
+
+
