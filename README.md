@@ -1,42 +1,26 @@
-# 🤖 LLM Chatbot
+# 🤖 Chatbot App using OpenAI and Streamlit
 
-A simple chatbot built using Hugging Face GPT-Neo and OpenAI's GPT-3.5-Turbo, deployed with Streamlit.
+A simple conversational chatbot built using OpenAI's GPT model (`gpt-3.5-turbo` or `gpt-4`) and Streamlit for the UI.
 
----
+## 🔧 Features
+- Chat interface with memory (session history)
+- Powered by GPT via OpenAI API
+- Streamlit-based frontend
+- Easily deployable on Heroku or Streamlit Cloud
 
-## 👨‍💻 Created By
+## 🛠️ Setup Instructions
 
-**Srikanta Vai Sravan**  
-Intern @ Launched Global AI Internship  
-Guided by **Harsh Vajpayee Sir**  
-With support from **Pravallika Gupta Ma’am**, Associate Team Lead, Launched Global  
+### 1. Clone the Repository
 
----
-
-## 🧠 Models Used
-
-- **GPT-Neo 1.3B** by EleutherAI (Offline Inference)
-- **OpenAI GPT-3.5 Turbo** (Online API access)
-
----
-
-## 📂 Setup Instructions
-
-### 1. Clone the Repo
-
-git clone https://github.com/your-username/chatbot-llm.git
+git clone https://github.com/yourusername/chatbot-llm.git
 cd chatbot-llm
 
-
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 pip install -r requirements.txt
-
 streamlit run chatbot_app.py
-pip install gradio
-pip install streamlit
-pip install transformers
 
-pip uninstall transformers
-pip install transformers==4.28.1
-
-
+heroku login
+heroku create chatbotapp.py
+git push heroku main
