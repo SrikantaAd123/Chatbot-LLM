@@ -2,7 +2,8 @@ import streamlit as st
 from transformers import pipeline
 
 st.title("🤖 AI Chatbot")
-chatbot = pipeline("text-generation", model="sshleifer/tiny-gpt2")  # Small model!
+chatbot = pipeline("text-generation", model="distilgpt2")
+
 
 user_input = st.text_input("You:")
 if user_input:
