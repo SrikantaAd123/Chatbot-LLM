@@ -1,20 +1,4 @@
-# Python
 __pycache__/
 *.py[cod]
-*.egg-info/
-*.egg
-*.log
-
-# Environment
 .env
 .venv/
-env/
-venv/
-ENV/
-
-# Jupyter
-.ipynb_checkpoints
-
-# Mac & system files
-.DS_Store
-Thumbs.db
