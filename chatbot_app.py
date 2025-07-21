@@ -1,5 +1,6 @@
 import streamlit as st
 from transformers import pipeline
+import torch  # ✅ Import torch to fix error
 
 st.title("🤖 Chat with AI - LLM")
 chatbot = pipeline("text-generation", model="EleutherAI/gpt-neo-1.3B")
